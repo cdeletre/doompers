@@ -1,1 +1,3 @@
 # doompers
+
+Just a simple Python script to automatically check and download new uploaded slides from talks at Troopers. It has been written on the base of Troopers 2017. Not tested for previous years, neither it has been deeply tested for 2017...
