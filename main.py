@@ -101,13 +101,17 @@ def update_tracks(data,key):
 
     for i,id in enumerate(data[key][u'tracks']):
         track = data[key][u'tracks'][id]
-        title,description,url_slides,speaker,about_speaker = extract_track_data(track[u'url'])
-        if ((u'url_slides' in track.keys() and track[u'url_slides'] == u'') or u'url_slides' not in track.keys()) and url_slides != u'':
-            # Slides were added
-            print(u'Slide url found for %s, will try to download' % id)
-            download_slides(url_slides, get_track_name(track[u'url']))
+        if u'url_slides' in track.keys() and track[u'url_slides'] == u'' or u'url_slides' not in track.keys():
+            # No slides url previously found or data for this track never dumped 
+            title,description,url_slides,speaker,about_speaker = extract_track_data(track[u'url'])
 
-        track[u'title'],track[u'description'],track[u'url_slides'],track[u'speaker'],track[u'about_speaker'] = title,description,url_slides,speaker,about_speaker
+            if url_slides != u'':
+                # Slides were found
+                print(u'Slide url found for %s, will try to download' % id)
+                download_slides(url_slides, get_track_name(track[u'url']))
+
+            # Save data for this track
+            track[u'title'],track[u'description'],track[u'url_slides'],track[u'speaker'],track[u'about_speaker'] = title,description,url_slides,speaker,about_speaker
 
 def extract_track_urls(url):
     # Return track urls detected at url
