@@ -11,7 +11,7 @@ Options:
   -h, --help            show this help message and exit
   -f FILE, --file=FILE  Write data to FILE
   -v, --verbose         Verbose mode
-``
+```
 
 The first run should give you something like this :
 ```
