@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
 import requests
@@ -18,6 +18,8 @@ JFILENAME = u'troopers-2017.json'
 SLIDESPATH = u'./slides/'
 
 DEBUG = False
+TEXT_ONLY = False
+RE_DOWNLOAD = False
 
 def debug(msg):
     global DEBUG
@@ -27,6 +29,14 @@ def debug(msg):
 def toggle_debug():
     global DEBUG
     DEBUG = not DEBUG
+
+def toggle_textonly():
+    global TEXT_ONLY
+    TEXT_ONLY = not TEXT_ONLY
+
+def toggle_redownload():
+    global RE_DOWNLOAD
+    RE_DOWNLOAD = not RE_DOWNLOAD
 
 def write_jfile(filename,data):
     # Write JSON data to file
@@ -99,19 +109,27 @@ def add_tracks(data,key,new_urls,conf_urls):
 def update_tracks(data,key):
     # Update track in JSON data for specific event (conf/tsd/ngi)
 
+    global TEXT_ONLY
+    global RE_DOWNLOAD
+
     for i,id in enumerate(data[key][u'tracks']):
         track = data[key][u'tracks'][id]
         if u'url_slides' in track.keys() and track[u'url_slides'] == u'' or u'url_slides' not in track.keys():
             # No slides url previously found or data for this track never dumped 
             title,description,url_slides,speaker,about_speaker = extract_track_data(track[u'url'])
 
-            if url_slides != u'':
+            if url_slides != u'' and not TEXT_ONLY:
                 # Slides were found
                 print(u'Slide url found for %s, will try to download' % id)
                 download_slides(url_slides, get_track_name(track[u'url']))
 
             # Save data for this track
             track[u'title'],track[u'description'],track[u'url_slides'],track[u'speaker'],track[u'about_speaker'] = title,description,url_slides,speaker,about_speaker
+
+        elif RE_DOWNLOAD and u'url_slides' in track.keys() and track[u'url_slides'] != u'':
+            # Re-download slides
+            print(u'Redownloading slides %s' % id)
+            download_slides(track[u'url_slides'], get_track_name(track[u'url']) )
 
 def extract_track_urls(url):
     # Return track urls detected at url
@@ -211,12 +229,24 @@ def download_slides(url,name):
 def main():
 
     parser = OptionParser()
-    parser.add_option("-f", "--file", dest="filename", default=JFILENAME, help="Write data to FILE", metavar="FILE")
+    parser.add_option("-f", "--file", dest="filename", default=JFILENAME, help="Write track data to FILE (%s by default)" % JFILENAME, metavar="FILE")
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False, help="Verbose mode")
+    parser.add_option("-t", "--text-only", action="store_true", dest="textonly", default=False, help="Text only, no slides are downloaded")
+    parser.add_option("-r", "--re-download", action="store_true", dest="redownload", default=False, help="Re-download slides")
     (options, args) = parser.parse_args()
 
     if options.verbose:
         toggle_debug()
+
+    if options.textonly and options.redownload:
+        print(u'You have to make a choice between text only and re-downloading')
+        return
+
+    if options.textonly:
+        toggle_textonly()
+
+    if options.redownload:
+        toggle_redownload()
 
     print(u'Loading data from %s' % options.filename)
     jdata = load_jfile(options.filename)

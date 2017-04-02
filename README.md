@@ -9,8 +9,11 @@ Usage: main.py [options]
 
 Options:
   -h, --help            show this help message and exit
-  -f FILE, --file=FILE  Write data to FILE
+  -f FILE, --file=FILE  Write track data to FILE (troopers-2017.json by
+                        default)
   -v, --verbose         Verbose mode
+  -t, --text-only       Text only, no slides are downloaded
+  -r, --re-download     Re-download slides
 ```
 
 The first run should give you something like this :
