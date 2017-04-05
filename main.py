@@ -77,7 +77,7 @@ def get_track_name(url):
 def get_url_root(url):
     # Return root from url
 
-    return '{uri.scheme}://{uri.netloc}/'.format(uri=urlparse( url ))
+    return '{uri.scheme}://{uri.netloc}'.format(uri=urlparse( url ))
 
 def get_url(data,key):
     # Return url for specific event (conf/tsd/ngi) from JSON data
