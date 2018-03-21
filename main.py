@@ -9,11 +9,11 @@ from urlparse import urlparse
 from optparse import OptionParser
 
 URLS = {}
-URLS [u'ngi'] = u'https://www.troopers.de/troopers17/ngi/'
-URLS [u'conf'] = u'https://www.troopers.de/troopers17/agenda/'
-URLS [u'tsd'] = u'https://www.troopers.de/troopers17/telco-sec-day/'
+URLS [u'ngi'] = u'https://www.troopers.de/troopers18/ngi/'
+URLS [u'conf'] = u'https://www.troopers.de/troopers18/agenda/'
+URLS [u'tsd'] = u'https://www.troopers.de/troopers18/telco-sec-day/'
 
-JFILENAME = u'troopers-2017.json'
+JFILENAME = u'troopers-2018.json'
 
 SLIDESPATH = u'./slides/'
 
